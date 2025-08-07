@@ -7,6 +7,8 @@ import { ManageRequestsComponent } from '@/admin/manage-requests/requests.compon
 export const appRoutes: Route[] = [
   { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
 
+  { path: 'auth/activate', loadComponent: () => import('@/features/auth/pages/activate.component').then(m => m.ActivateComponent) },
+
   {
     path: 'auth',
     children: [

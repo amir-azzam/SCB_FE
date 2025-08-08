@@ -24,7 +24,7 @@ function passwordsMatchValidator(form: FormGroup) {
   const confirmPassword = form.get('confirmPassword')?.value;
 
   if (!confirmPassword) {
-    return null; 
+    return null;
   }
 
   return password === confirmPassword ? null : { passwordMismatch: true };
@@ -73,12 +73,11 @@ function passwordsMatchValidator(form: FormGroup) {
               (ngSubmit)="onSave()"
               class="space-y-6 pt-4"
             >
-
-            <p-message
+              <p-message
                 *ngIf="errorMessage"
                 severity="error"
                 styleClass="text-red-200 flex items-center  -mt-6 "
-                 [text]="errorMessage"
+                [text]="errorMessage"
               >
                 <ng-template pTemplate="message">
                   <div class="flex items-center text-red-600">
@@ -178,8 +177,6 @@ function passwordsMatchValidator(form: FormGroup) {
                 </small>
               </div>
 
-              
-
               <div class="pt-2">
                 <p-button
                   type="submit"
@@ -212,7 +209,6 @@ function passwordsMatchValidator(form: FormGroup) {
           border-radius: 16px 16px 0 0;
         }
 
-        
         .p-password input:focus {
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
           border-color: rgb(59, 130, 246) !important;
@@ -291,8 +287,8 @@ export class ActivateComponent implements OnDestroy {
     this.errorMessage = '';
 
     const credentials: SetPasswordRequest = {
-      token: this.extractToken() ,
-      password: this.activateForm.get('password')?.value
+      token: this.extractToken(),
+      password: this.activateForm.get('password')?.value,
     };
 
     this.authService
@@ -306,7 +302,7 @@ export class ActivateComponent implements OnDestroy {
           // Success - navigation handled in auth service
         },
         error: (error) => {
-            console.log('Activation error:', error);
+          console.log('Activation error:', error);
           this.errorMessage =
             error.message || 'Activation failed. Please try again.';
         },
@@ -314,10 +310,9 @@ export class ActivateComponent implements OnDestroy {
   }
 
   extractToken(): string {
-     const currentUrl = this.router.url;
+    const currentUrl = this.router.url;
     const urlParams = new URLSearchParams(currentUrl.split('?')[1]);
     const token = urlParams.get('token');
-   return token ?? '';
+    return token ?? '';
   }
-
 }

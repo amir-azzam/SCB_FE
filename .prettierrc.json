@@ -10,9 +10,17 @@
   "singleQuote": true,
   "arrowParens": "avoid",
   "singleAttributePerLine": true,
-  "plugins": ["prettier-plugin-tailwindcss", "@ianvs/prettier-plugin-sort-imports"],
+  "plugins": [
+    "prettier-plugin-tailwindcss",
+    "@ianvs/prettier-plugin-sort-imports"
+  ],
   "importOrderParserPlugins": ["typescript", "decorators-legacy"],
-  "importOrder": ["^@angular/(.*)$", "^rxjs|rxjs/(.*)$", "<THIRD_PARTY_MODULES>", "^[./]"],
+  "importOrder": [
+    "^@angular/(.*)$",
+    "^rxjs|rxjs/(.*)$",
+    "<THIRD_PARTY_MODULES>",
+    "^[./]"
+  ],
   "overrides": [
     {
       "files": "*.html",

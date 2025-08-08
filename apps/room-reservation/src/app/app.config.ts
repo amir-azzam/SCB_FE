@@ -21,6 +21,7 @@ export const appConfig: ApplicationConfig = {
           cssLayer: false,
         },
       },
+      ripple: true,
     }),
     provideHttpClient(),
     {

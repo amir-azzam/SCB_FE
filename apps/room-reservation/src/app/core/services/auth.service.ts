@@ -66,10 +66,6 @@ export class AuthService {
       );
   }
 
-
-
- 
-
   /**
    * Mock login for development (remove when API is ready)
    */
@@ -153,8 +149,6 @@ export class AuthService {
     this.router.navigate([defaultRoute]);
   }
 
- 
-
   /**
    * Handle login errors
    */
@@ -164,7 +158,7 @@ export class AuthService {
 
     if (error.error && error.error.message) {
       errorMessage = error.error.message;
-    
+
       // Map API error messages to error types
       if (error.status === 401) {
         if (error.error.message.includes('locked')) {
@@ -183,7 +177,6 @@ export class AuthService {
       message: errorMessage,
     }));
   }
- 
 
   /**
    * Logout user
@@ -244,26 +237,28 @@ export class AuthService {
    */
   private isDevelopmentMode(): boolean {
     // Return true to use mock data, false to use real API
-    return false; // Change to false when API is ready
+    return true; // Change to false when API is ready
   }
 
-  // Activation 
-   activate(credentials:SetPasswordRequest): Observable<SetPasswordResponse> {
+  activate(credentials: SetPasswordRequest): Observable<SetPasswordResponse> {
     return this.http
-      .post<SetPasswordResponse>(`${this.apiUrl}/auth/set-password`, credentials)
+      .post<SetPasswordResponse>(
+        `${this.apiUrl}/auth/set-password`,
+        credentials
+      )
       .pipe(
         tap((response) => {
           this.handleActivationSuccess(response);
         }),
-       catchError((error) => this.handleActivationError(error))
+        catchError((error) => this.handleActivationError(error))
       );
   }
 
-   private handleActivationSuccess(response: SetPasswordResponse): void {
-    this.router.navigate(['/auth/login'])
+  private handleActivationSuccess(response: SetPasswordResponse): void {
+    this.router.navigate(['/auth/login']);
   }
 
-   handleActivationError(error: any): Observable<never> {
+  handleActivationError(error: any): Observable<never> {
     let errorMessage = 'Activation failed. Please try again.';
     if (error.error && error.error.message) {
       errorMessage = error.error.message;
@@ -274,7 +269,5 @@ export class AuthService {
     return throwError(() => ({
       message: errorMessage,
     }));
-
   }
-
 }

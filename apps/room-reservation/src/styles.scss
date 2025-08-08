@@ -2,8 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "primeicons/primeicons.css";
-
+@import 'primeicons/primeicons.css';
 
 :root {
   --primary-color: #2563eb;
@@ -25,7 +24,8 @@
 }
 
 /* Global Styles */
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;

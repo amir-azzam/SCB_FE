@@ -24,14 +24,14 @@ function passwordsMatchValidator(form: FormGroup) {
   const confirmPassword = form.get('confirmPassword')?.value;
 
   if (!confirmPassword) {
-    return null; // No mismatch error if confirmPassword is empty
+    return null; 
   }
 
   return password === confirmPassword ? null : { passwordMismatch: true };
 }
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-activate',
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -303,7 +303,6 @@ export class ActivateComponent implements OnDestroy {
       )
       .subscribe({
         next: () => {
-          //  this.router.navigate(['/auth/login']);
           // Success - navigation handled in auth service
         },
         error: (error) => {

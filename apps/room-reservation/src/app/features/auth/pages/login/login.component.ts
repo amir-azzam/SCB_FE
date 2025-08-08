@@ -167,7 +167,7 @@ import { LoginRequest } from '@/models/auth.model';
         .p-inputtext:focus,
         .p-password input:focus {
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-          border-color: rgb(59, 130, 246);
+          border-color: rgb(59, 130, 246) !important;
         }
 
         .p-button {

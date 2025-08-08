@@ -16,7 +16,7 @@ import { MessageModule } from 'primeng/message';
 import { DividerModule } from 'primeng/divider';
 
 import { AuthService } from '@/services/auth.service';
-import { LoginRequest } from '@/models/auth.model';
+import { LoginRequest, SetPasswordRequest } from '@/models/auth.model';
 import { Router } from '@angular/router';
 
 function passwordsMatchValidator(form: FormGroup) {
@@ -70,9 +70,23 @@ function passwordsMatchValidator(form: FormGroup) {
           <ng-template pTemplate="content">
             <form
               [formGroup]="activateForm"
-              (ngSubmit)="onSubmit()"
+              (ngSubmit)="onSave()"
               class="space-y-6 pt-4"
             >
+
+            <p-message
+                *ngIf="errorMessage"
+                severity="error"
+                styleClass="text-red-200 flex items-center  -mt-6 "
+                 [text]="errorMessage"
+              >
+                <ng-template pTemplate="message">
+                  <div class="flex items-center text-red-600">
+                    <i class="pi pi-times-circle mr-2"></i>
+                    <span>{{ errorMessage }}</span>
+                  </div>
+                </ng-template>
+              </p-message>
               <div class="space-y-2">
                 <label class="block text-sm font-medium text-gray-700">
                   <i class="pi pi-lock mr-1 text-gray-500"></i>
@@ -164,23 +178,12 @@ function passwordsMatchValidator(form: FormGroup) {
                 </small>
               </div>
 
-              <p-message
-                *ngIf="errorMessage"
-                severity="error"
-                styleClass="w-full"
-              >
-                <ng-template pTemplate>
-                  <div class="flex items-center">
-                    <i class="pi pi-times-circle mr-2"></i>
-                    <span>{{ errorMessage }}</span>
-                  </div>
-                </ng-template>
-              </p-message>
+              
 
               <div class="pt-2">
                 <p-button
                   type="submit"
-                  label="Activate"
+                  label="Save"
                   icon="pi pi-sign-in"
                   styleClass="w-full"
                   size="large"
@@ -209,10 +212,10 @@ function passwordsMatchValidator(form: FormGroup) {
           border-radius: 16px 16px 0 0;
         }
 
-        .p-inputtext:focus,
+        
         .p-password input:focus {
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-          border-color: rgb(59, 130, 246);
+          border-color: rgb(59, 130, 246) !important;
         }
 
         .p-button {
@@ -281,16 +284,19 @@ export class ActivateComponent implements OnDestroy {
     this.destroy$.complete();
   }
 
-  onSubmit(): void {
+  onSave(): void {
     if (this.activateForm.invalid || this.isLoading) return;
 
     this.isLoading = true;
     this.errorMessage = '';
 
-    const credentials: LoginRequest = this.activateForm.value;
+    const credentials: SetPasswordRequest = {
+      token: this.extractToken() ,
+      password: this.activateForm.get('password')?.value
+    };
 
     this.authService
-      .login(credentials)
+      .activate(credentials)
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => (this.isLoading = false))
@@ -301,9 +307,18 @@ export class ActivateComponent implements OnDestroy {
           // Success - navigation handled in auth service
         },
         error: (error) => {
+            console.log('Activation error:', error);
           this.errorMessage =
-            error.message || 'Login failed. Please try again.';
+            error.message || 'Activation failed. Please try again.';
         },
       });
   }
+
+  extractToken(): string {
+     const currentUrl = this.router.url;
+    const urlParams = new URLSearchParams(currentUrl.split('?')[1]);
+    const token = urlParams.get('token');
+   return token ?? '';
+  }
+
 }

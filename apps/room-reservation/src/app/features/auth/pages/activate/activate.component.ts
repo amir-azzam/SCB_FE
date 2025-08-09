@@ -286,8 +286,15 @@ export class ActivateComponent implements OnDestroy {
     this.isLoading = true;
     this.errorMessage = '';
 
+    const token = this.extractToken();
+    if (!token) {
+      this.errorMessage = 'Invalid activation token. Please request a new one.';
+      this.isLoading = false;
+      return;
+    }
+
     const credentials: SetPasswordRequest = {
-      token: this.extractToken(),
+      token: token,
       password: this.activateForm.get('password')?.value,
     };
 
@@ -309,10 +316,13 @@ export class ActivateComponent implements OnDestroy {
       });
   }
 
-  extractToken(): string {
+  extractToken(): string | null {
     const currentUrl = this.router.url;
     const urlParams = new URLSearchParams(currentUrl.split('?')[1]);
     const token = urlParams.get('token');
-    return token ?? '';
+    if (token) {
+      return token;
+    }
+    return null;
   }
 }

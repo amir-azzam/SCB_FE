@@ -33,13 +33,19 @@ interface StaffMember {
   providers: [ConfirmationService],
   template: `
     <div class="space-y-6">
-      <!-- Page Header -->
       <div class="flex items-center justify-between">
-        <div>
-          <h1 class="text-2xl font-bold text-gray-900">Staff Members</h1>
-          <p class="text-gray-600 mt-1">
-            Manage staff user accounts and access
-          </p>
+        <div class="flex items-center space-x-3">
+          <div
+            class="h-12 w-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center"
+          >
+            <i class="pi pi-users text-white text-xl"></i>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">Staff Members</h1>
+            <p class="text-gray-600 mt-1">
+              Manage staff user accounts and access
+            </p>
+          </div>
         </div>
         <p-button
           label="Add People"
@@ -146,13 +152,13 @@ interface StaffMember {
           <p-button
             label="Cancel"
             icon="pi pi-times"
-            styleClass="p-button-text"
+            styleClass="p-button-danger p-button-sm"
             (onClick)="hideAddDialog()"
           ></p-button>
           <p-button
             label="Save"
             icon="pi pi-check"
-            styleClass="p-button-primary"
+            styleClass="p-button-success  p-button-sm"
             (onClick)="addStaffMember()"
             [disabled]="!isValidEmail(newUserEmail)"
             [loading]="adding"
@@ -184,6 +190,17 @@ interface StaffMember {
 
         .p-datatable .p-datatable-tbody > tr:hover {
           background-color: #f9fafb;
+        }
+
+        /* Custom status tag colors */
+        .p-tag.p-tag-success {
+          background: #c8fcdbd5;
+          color: #2fe271ff;
+        }
+
+        .p-tag.p-tag-warning {
+          background: #fbedc9ff;
+          color: #eab208ff;
         }
 
         .p-button-success {
@@ -310,7 +327,7 @@ export class ManagePeopleComponent implements OnInit {
       this.adding = false;
       this.hideAddDialog();
 
-      this.notificationService.success('✅ User added successfully');
+      this.notificationService.success('User added successfully');
     }, 1500);
   }
 

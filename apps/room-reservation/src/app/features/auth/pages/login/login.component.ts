@@ -122,7 +122,7 @@ import { LoginRequest } from '@/models/auth.model';
               <p-message
                 *ngIf="errorMessage"
                 severity="error"
-                styleClass="text-red-200 flex items-center   "
+                styleClass="text-red-200 flex items-center mt-2  "
                 [text]="errorMessage"
               >
                 <ng-template pTemplate="message">

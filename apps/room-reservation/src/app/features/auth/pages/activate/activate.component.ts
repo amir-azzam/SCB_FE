@@ -73,19 +73,6 @@ function passwordsMatchValidator(form: FormGroup) {
               (ngSubmit)="onSave()"
               class="space-y-6 pt-4"
             >
-              <p-message
-                *ngIf="errorMessage"
-                severity="error"
-                styleClass="text-red-200 flex items-center  -mt-6 "
-                [text]="errorMessage"
-              >
-                <ng-template pTemplate="message">
-                  <div class="flex items-center text-red-600">
-                    <i class="pi pi-times-circle mr-2"></i>
-                    <span>{{ errorMessage }}</span>
-                  </div>
-                </ng-template>
-              </p-message>
               <div class="space-y-2">
                 <label class="block text-sm font-medium text-gray-700">
                   <i class="pi pi-lock mr-1 text-gray-500"></i>
@@ -176,6 +163,20 @@ function passwordsMatchValidator(form: FormGroup) {
                   Passwords do not match
                 </small>
               </div>
+
+              <p-message
+                *ngIf="errorMessage"
+                severity="error"
+                styleClass="text-red-200 flex items-center  mt-2 "
+                [text]="errorMessage"
+              >
+                <ng-template pTemplate="message">
+                  <div class="flex items-center text-red-600">
+                    <i class="pi pi-times-circle mr-2"></i>
+                    <span>{{ errorMessage }}</span>
+                  </div>
+                </ng-template>
+              </p-message>
 
               <div class="pt-2">
                 <p-button

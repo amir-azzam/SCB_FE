@@ -5,8 +5,8 @@ export enum UserRole {
 
 // TODO: Add more roles as needed like BLOCKED
 export enum UserStatus {
-  ACTIVATED = 'activated',
-  NOT_ACTIVATED = 'not_activated',
+  Active = 'active',
+  Pending = 'pending',
 }
 
 export interface User {

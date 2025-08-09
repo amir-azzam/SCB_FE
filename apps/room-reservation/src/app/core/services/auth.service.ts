@@ -224,7 +224,7 @@ export class AuthService {
   getDefaultRouteForUser(user: AuthUser): string {
     switch (user.role) {
       case UserRole.ADMIN:
-        return '/admin/manage-requests'; // Changed from manage-people
+        return '/admin/manage-people'; // Changed from manage-people
       case UserRole.STAFF:
         return '/dashboard/calendar';
       default:

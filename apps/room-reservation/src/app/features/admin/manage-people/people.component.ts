@@ -192,7 +192,6 @@ interface StaffMember {
           background-color: #f9fafb;
         }
 
-        /* Custom status tag colors */
         .p-tag.p-tag-success {
           background: #c8fcdbd5;
           color: #2fe271ff;

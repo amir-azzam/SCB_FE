@@ -7,18 +7,7 @@ import { TableModule } from 'primeng/table';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { NotificationService } from '@/shared/services/notification.service';
-
-interface BookingRequest {
-  id: string;
-  requesterEmail: string;
-  requestDate: Date;
-  bookingDate: Date;
-  startTime: string;
-  endTime: string;
-  duration: string;
-  roomNumber: string;
-  status: 'pending';
-}
+import { BookingRequest } from '@/core/models/booking.model';
 
 @Component({
   selector: 'app-manage-requests',
@@ -32,7 +21,6 @@ interface BookingRequest {
   providers: [ConfirmationService],
   template: `
     <div class="space-y-6">
-      <!-- Page Header -->
       <div class="flex items-center space-x-3">
         <div
           class="h-12 w-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center"
@@ -45,7 +33,6 @@ interface BookingRequest {
         </div>
       </div>
 
-      <!-- Requests Table -->
       <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
         <p-table
           [value]="bookingRequests"

@@ -7,19 +7,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { NotificationService } from '@/shared/services/notification.service';
-
-interface TimeSlot {
-  time: string;
-  status: 'available' | 'pending' | 'booked';
-  bookingId?: string;
-  guestName?: string;
-}
-
-interface Room {
-  id: string;
-  name: string;
-  slots: TimeSlot[];
-}
+import { Room, TimeSlot } from '@/core/models/room.model';
 
 @Component({
   selector: 'app-manage-rooms',
@@ -33,7 +21,6 @@ interface Room {
   providers: [ConfirmationService],
   template: `
     <div class="space-y-6">
-      <!-- Page Header -->
       <div class="flex items-center space-x-3">
         <div
           class="h-12 w-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center"
@@ -48,7 +35,6 @@ interface Room {
         </div>
       </div>
 
-      <!-- Date Picker -->
       <div class="bg-white rounded-lg border border-gray-200 p-6">
         <div class="flex items-center space-x-4">
           <div>
@@ -68,7 +54,6 @@ interface Room {
         </div>
       </div>
 
-      <!-- Room Availability Grid -->
       <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
         <div class="p-6 border-b border-gray-200">
           <h3 class="text-lg font-semibold text-gray-900">
@@ -78,7 +63,6 @@ interface Room {
 
         <div class="overflow-x-auto">
           <div class="inline-block min-w-full">
-            <!-- Time Header -->
             <div class="flex bg-gray-50 border-b border-gray-200">
               <div class="w-24 p-4 font-medium text-gray-700 text-center">
                 Room
@@ -93,7 +77,6 @@ interface Room {
               </div>
             </div>
 
-            <!-- Room Rows -->
             <div
               *ngFor="let room of rooms; trackBy: trackByRoomId"
               class="flex border-b border-gray-100 hover:bg-gray-50"
@@ -225,7 +208,6 @@ export class ManageRoomsComponent implements OnInit {
   }
 
   loadRoomData() {
-    // Generate sample data similar to the screenshot
     this.rooms = [
       {
         id: '1',
@@ -245,7 +227,6 @@ export class ManageRoomsComponent implements OnInit {
       let status: 'available' | 'pending' | 'booked' = 'available';
       let guestName = '';
 
-      // Sample data to match the screenshot
       if (roomId === 'room1') {
         if (time === '10:00') {
           status = 'pending';
@@ -269,7 +250,6 @@ export class ManageRoomsComponent implements OnInit {
   }
 
   onDateChange() {
-    // Reload room data for the selected date
     this.loadRoomData();
   }
 
@@ -301,7 +281,6 @@ export class ManageRoomsComponent implements OnInit {
   }
 
   cancelBooking(room: Room, slotIndex: number) {
-    // Simulate API call
     setTimeout(() => {
       room.slots[slotIndex] = {
         time: room.slots[slotIndex].time,

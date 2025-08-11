@@ -1,0 +1,102 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool: FrontendPool
+
+stages:
+- stage: DockerBuildAndPush
+  displayName: "Build and Push frontend Image"
+  jobs:
+  - job: BuildAndPushJob
+    displayName: "Build and Push Docker Image"
+    steps:
+    - task: Docker@2
+      displayName: "Build and Push Docker Image"
+      inputs:
+        containerRegistry: 'docker-service-connection'
+        repository: 'amirazzamm/booking_frontend'
+        command: 'buildAndPush'
+        Dockerfile: 'roombooking/Dockerfile'
+        buildContext: 'roombooking'
+        tags: |
+          $(Build.BuildId)
+################################## K8S
+- stage: DeployDev
+  displayName: "Deploy frontend to Kubernetes dev cluster"
+  dependsOn: DockerBuildAndPush
+  jobs:
+  - deployment: DeployfrontendDev
+    displayName: "Deploy to K8s Cluster"
+    environment: dev-cluster
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: Bash@3
+            displayName: "Replace Image Tag in YAML"
+            inputs:
+              targetType: 'inline'
+              script: |
+                echo "Replacing image tag..."
+                sed -i 's|DOCKER_IMAGE|amirazzamm/booking_frontend:$(Build.BuildId)|g' apps/k8s.yaml 
+                echo "Deployment File is:"
+                cat $(Build.SourcesDirectory)/apps/k8s.yaml
+
+          - task: Kubernetes@1
+            displayName: "Apply Kubernetes Deployment"
+            inputs:
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceEndpoint: 'aws-k3s-cluster'
+              namespace: 'room-booking'
+              command: 'apply'
+              useConfigurationFile: true
+              configuration: 'apps/k8s.yaml'
+
+- stage: DeployUAT
+  displayName: "Deploy frontend to Kubernetes UAT cluster"
+  dependsOn:
+    - DockerBuildAndPush
+    - DeployDev
+  jobs:
+  - deployment: DeployfrontendUAT
+    displayName: "Deploy to K8s Cluster"
+    environment: UAT-cluster
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: Kubernetes@1
+            displayName: "Apply Kubernetes Deployment"
+            inputs:
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceEndpoint: 'k3s-cluster-uat'
+              namespace: 'room-booking'
+              command: 'apply'
+              useConfigurationFile: true
+              configuration: 'apps/k8s.yaml'
+
+- stage: DeployToProd
+  displayName: "Deploy frontend to Kubernetes Prod cluster"
+  dependsOn:
+    - DockerBuildAndPush
+    - DeployDev
+    - DeployUAT
+  jobs:
+  - deployment: DeployfrontendProd
+    displayName: "Deploy to K8s Cluster"
+    environment: Prod-cluster
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: Kubernetes@1
+            displayName: "Apply Kubernetes Deployment"
+            inputs:
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceEndpoint: 'k3s-cluster-production'
+              namespace: 'room-booking'
+              command: 'apply'
+              useConfigurationFile: true
+              configuration: 'apps/k8s.yaml'

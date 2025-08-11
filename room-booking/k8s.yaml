@@ -1,0 +1,63 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: room-booking-frontend
+  labels:
+    app: room-booking-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: room-booking-frontend
+  template:
+    metadata:
+      labels:
+        app: room-booking-frontend
+    spec:
+      containers:
+      - name: room-booking-frontend
+        image: DOCKER_IMAGE
+        resources:
+          requests:
+            memory: 200M
+            cpu: 100m
+          limits:
+            memory: 500M
+            cpu: 200m
+        ports:
+          - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: room-booking-frontend
+  name: room-booking-frontend
+spec:
+  ports:
+    - name: "80-80"
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: room-booking-frontend
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: room-booking-frontend
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: room-booking-frontend
+                port:
+                  number: 80

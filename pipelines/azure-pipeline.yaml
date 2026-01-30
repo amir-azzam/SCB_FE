@@ -19,7 +19,7 @@ stages:
         repository: 'amirazzamm/booking_frontend'
         command: 'buildAndPush'
         Dockerfile: 'roombooking/Dockerfile'
-        buildContext: 'roombooking'
+        buildContext: '$(Build.SourcesDirectory)/room-booking'
         tags: |
           $(Build.BuildId)
 ################################## K8S
